@@ -6,5 +6,6 @@ interface IVault{
     function withdraw(uint256 _amount) external;
     function getBalance() external view returns(uint256);
     function getBalanceOf(address _user) external view returns(uint256);
-    function credit(address _user, uint256 _amount) external;
+    function lockBalance(address _user, uint256 _amount) external returns(bool);
+    function unlockBalance(address _user, uint256 _amount) external returns(bool);
 }

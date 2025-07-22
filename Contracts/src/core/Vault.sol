@@ -45,14 +45,18 @@ contract Vault{
         emit Withdrawn(msg.sender, _amount);
     }
 
-    function lockBalance(address _user, uint256 _amount) external onlyPositionManager{
+    function lockBalance(address _user, uint256 _amount) external onlyPositionManager returns(bool){
+        require(balances[_user] >=_amount, "Insufficient Balance");
         balances[_user] -= _amount;
         lockedBalances[_user] += _amount;
+        return(true);
     }
 
-    function unlockBalance(address _user, uint256 _amount) external onlyPositionManager{
+    function unlockBalance(address _user, uint256 _amount) external onlyPositionManager returns(bool){
+        require(lockedBalances[_user] >=_amount, "Insufficient Balance");
         lockedBalances[_user] -= _amount;
         balances[_user] += _amount;
+        return(true);
     }
 
     function getBalance() public view returns(uint256){
