@@ -1,7 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "../interfaces/IPriceFeed.sol";
+import "../interfaces/IVault.sol";
+
 contract PositionManager {
+
+    IPriceFeed priceFeed;
+    IVault vault;
     
     struct Position {
         address user;
@@ -31,13 +37,19 @@ contract PositionManager {
         bool isLong
     );
 
+    constructor(address _vaultAddress, address _priceFeedAddress){
+        vault = IVault(_vaultAddress);
+        priceFeed = IPriceFeed(_priceFeedAddress);
+    }
+
     function openPosition(
         address _user,
         uint256 collateral,
         uint entryPrice,
         uint8 leverage,
         bool isLong
-    ) public {}
+    ) public {
+    }
 
     function closePosition(address _user) public {}
 
