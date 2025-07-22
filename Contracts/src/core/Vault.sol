@@ -9,6 +9,7 @@ contract Vault{
     address positionManager;
     address owner;
     mapping(address => uint256) balances;
+    mapping(address => uint256) lockedBalances;
 
     constructor(address _usdtAddress, address _owner){
         usdt = IERC20(_usdtAddress);
@@ -27,7 +28,6 @@ contract Vault{
 
     event Deposited(address indexed depositor, uint amount);
     event Withdrawn(address indexed withdrawer, uint amount);
-    event Credited(address indexed reciver, uint amount);
 
     function deposit(uint256 _amount) public {
         require(_amount > 0, "Amount should be greater than 0");
@@ -45,9 +45,14 @@ contract Vault{
         emit Withdrawn(msg.sender, _amount);
     }
 
-    function credit(address _user, uint256 _amount) external onlyPositionManager{
+    function lockBalance(address _user, uint256 _amount) external onlyPositionManager{
+        balances[_user] -= _amount;
+        lockedBalances[_user] += _amount;
+    }
+
+    function unlockBalance(address _user, uint256 _amount) external onlyPositionManager{
+        lockedBalances[_user] -= _amount;
         balances[_user] += _amount;
-        emit Credited(_user, _amount);
     }
 
     function getBalance() public view returns(uint256){
